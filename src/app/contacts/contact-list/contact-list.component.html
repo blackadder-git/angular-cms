@@ -10,13 +10,14 @@
         </div>
     </div>
     <div class="panel-body">
-        <div *ngFor="let contact of contacts" class="row contact-item">
-            <div class="col-xs-6">
-                <h3>{{ contact.name }}</h3>
-            </div>
-            <div class="col-xs-6 text-right">
-                <img [src]="contact.imageUrl" alt="{{ contact.name }}" class="contact-image">
-            </div>
-        </div>
+        <!-- contacts lives in the component.ts -->
+        <!-- for each contact in contacts, pass to [contact] in contact-item -->
+        <!-- pass the same contact object to the onSelect() method -->
+        <cms-contact-item
+            *ngFor="let contact of contacts"
+            [contact]="contact"
+            (click)="onSelected(contact)"
+        >
+        </cms-contact-item>
     </div>
 </div>

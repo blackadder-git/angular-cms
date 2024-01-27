@@ -1,10 +1,16 @@
 <div class="container">
     <div class="row">
         <div class="col-md-5">
-            <cms-contact-list></cms-contact-list>
+            <!-- set selectedContact in contacts.component.ts to $event when the selectedContactEvent is caught -->
+            <cms-contact-list (selectedContactEvent)="selectedContact = $event"></cms-contact-list>
         </div>
         <div class="col-md-4">
-            <cms-contact-detail></cms-contact-detail>
+            <cms-contact-detail
+                *ngIf="selectedContact"
+                [contact]="selectedContact"
+            >
+            This is invisible
+            </cms-contact-detail>
         </div>
     </div>
 </div>
