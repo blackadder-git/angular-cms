@@ -1,11 +1,19 @@
 <div class="row">
     <div class="col-md-5">
-        <!--Add tag to load the DocumentListComponent here-->
-        <cms-document-list></cms-document-list>
+        <!-- listen for selectedDocumentEvent event, set selectedDocument in documents.component.ts to $event 
+             when the selectedDocumentEvent is caught -->
+        <cms-document-list (selectedDocumentEvent)="selectedDocument = $event"></cms-document-list>
     </div>
   
     <div class="col-md-4">
-        <!--Add tag to load the DocumentDetailComponent here-->
-        <cms-document-detail></cms-document-detail>
+        <!--Add tag to load the DocumentDetailComponent here
+        assign the value of the selectedDocument variable into the document input variable defined in the DocumentDetailComponent.
+        -->
+        <cms-document-detail
+            *ngIf="selectedDocument"
+            [document]="selectedDocument"
+        >
+        This is invisible
+        </cms-document-detail>
     </div>
 </div>
