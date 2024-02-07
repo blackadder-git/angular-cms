@@ -8,21 +8,15 @@ import { ContactService } from '../contact.service';
   styleUrl: './contact-list.component.css'
 })
 export class ContactListComponent implements OnInit {
-  @Output() selectedContactEvent = new EventEmitter<Contact>();
-
   contacts: Contact[] = [];
 
-  constructor(private contactService: ContactService) {
-
-  }
+  constructor(private contactService: ContactService) {}
 
   ngOnInit(): void {
     this.contacts = this.contactService.getContacts();
   }
 
-
-  // when element is clicked, send event to parent
   onSelected(contact: Contact) {
-    this.selectedContactEvent.emit(contact);
+    this.contactService.contactSelectedEvent.emit(contact);
   }
 }
