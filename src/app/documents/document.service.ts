@@ -6,7 +6,7 @@ import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
   providedIn: 'root'
 })
 export class DocumentService {
-  documents: Document[] = [];
+  private documents: Document[] = [];
   documentSelectedEvent = new EventEmitter<Document>();
 
   constructor() { 
@@ -19,12 +19,10 @@ export class DocumentService {
 
     // Return document object matching id or, if not found, return null
   getDocument(id: string) {
-    this.documents.forEach(document => {
-      if (document.id == id) {
-        return document;
-      }
-    });
-
-    return null;
+    console.log("Document Lookup: ", id)
+    
+    // Using return inside a forEach loop exits the loop, not the function
+    // Instead, use find to return the document or null if not found
+    return this.documents.find(document => document.id === id);
   }
 }

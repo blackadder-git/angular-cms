@@ -6,7 +6,7 @@ import { MOCKCONTACTS } from './MOCKCONTACTS';
   providedIn: 'root'
 })
 export class ContactService {
-  contacts: Contact[] = [];
+  private contacts: Contact[] = [];
   contactSelectedEvent = new EventEmitter<Contact>();
 
   constructor() {
@@ -19,12 +19,10 @@ export class ContactService {
 
   // Return contact object matching id or, if not found, return null
   getContact(id: String) {
-    this.contacts.forEach(contact => {
-      if (contact.id == id) {
-        return contact;
-      }
-    });
-
-    return null;
+    console.log("Contact Lookup: ", id)
+    
+    // Using return inside a forEach loop exits the loop, not the function
+    // Instead, use find to return the contact or null if not found
+    return this.contacts.find(contact => contact.id === id);
   }
 }

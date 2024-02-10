@@ -2,6 +2,14 @@ import {Contact} from './contact.model';
 
 export const MOCKCONTACTS: Contact[] = [
   // individual contacts
+  {
+    id: '0',
+    name: 'JC Cox',
+    email: 'calvin@byui.edu',
+    phone: '208-496-3768',
+    imageUrl: '../../assets/images/calvinhobbes.jpg',
+    group: null
+  },  
   // index 0
   {
     id: '1',

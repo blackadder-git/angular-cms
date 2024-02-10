@@ -3,9 +3,9 @@ import {Message} from './message.model';
 export const MOCKMESSAGES: Message[] = [
   {
     id: '1', 
-   subject: 'CIT 366 assignment 1', 
-   msgText: 'The grades for this assignment have been posted.', 
-   sender: '7'},
+    subject: 'CIT 366 assignment 1', 
+    msgText: 'The grades for this assignment have been posted.', 
+    sender: '7'},
   {
     id: '2', 
     subject: 'CIT 366 assignment 3', 
