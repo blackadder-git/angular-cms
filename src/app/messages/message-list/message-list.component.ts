@@ -13,7 +13,7 @@ export class MessageListComponent implements OnInit {
   constructor(private messageService: MessageService) {}
 
   ngOnInit(): void {
-    this.messages = this.messageService.getMessages();
+    this.messages = this.messageService.getMessages(); // load MOCKMESSAGES
     //console.log(this.messages)
     // listen for the contactSelectedEvent to happen
     // when it happens set the selectedContact to contact
@@ -23,10 +23,5 @@ export class MessageListComponent implements OnInit {
           this.messages = this.messageService.getMessages();
         }
       );
-
-  }
-
-  onAddMessage(message: Message) {
-    this.messages.push(message);
   }
 }

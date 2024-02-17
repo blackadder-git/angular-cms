@@ -1,7 +1,15 @@
-<cms-header (selectedFeatureEvent)="switchView($event)"></cms-header>
+<!--cms-header (selectedFeatureEvent)="switchView($event)"></cms-header-->
+<cms-header></cms-header>
 <div class="container pull-left">
-    <cms-documents *ngIf="selectedFeature === 'documents'"></cms-documents>
-    <cms-message-list *ngIf="selectedFeature === 'messages'"></cms-message-list>
-    <cms-contacts *ngIf="selectedFeature === 'contacts'"></cms-contacts>
+    <div class="row">
+        <div class="col-md-12">
+            <!--cms-documents *ngIf="selectedFeature === 'documents'"></cms-documents>
+            <cms-message-list *ngIf="selectedFeature === 'messages'"></cms-message-list>
+            <cms-contacts *ngIf="selectedFeature === 'contacts'"></cms-contacts-->
+        
+            <!-- mark the spot where Angular should load the currently selected component -->
+            <router-outlet></router-outlet>
+        </div>
+    </div>
 </div>    
 <!--cms-contacts></cms-contacts-->

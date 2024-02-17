@@ -9,7 +9,7 @@ export const MOCKCONTACTS: Contact[] = [
     phone: '208-496-3768',
     imageUrl: '../../assets/images/calvinhobbes.jpg',
     group: null
-  },  
+  },
   // index 0
   {
     id: '1',

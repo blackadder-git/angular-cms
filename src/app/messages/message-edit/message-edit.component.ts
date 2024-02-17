@@ -21,7 +21,7 @@ export class MessageEditComponent {
       this.subject.nativeElement.value, 
       this.msgText.nativeElement.value, 
       this.currentSender);
-    this.messageService.addMessage(message);
+    this.messageService.addMessage(message); // add to messages array
     
     console.log("New Message id", message.id);
   }

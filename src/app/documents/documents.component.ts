@@ -15,7 +15,7 @@ export class DocumentsComponent implements OnInit {
 
   ngOnInit(): void {
     // listen for the documentSelectedEvent to happen
-    // when it happens set the selectedDocument to document
+    // when it does, set selectedDocument to the document passed by the event
     this.documentService.documentSelectedEvent
       .subscribe(
         (document: Document) => {

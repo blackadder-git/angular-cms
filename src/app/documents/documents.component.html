@@ -6,14 +6,16 @@
     </div>
   
     <div class="col-md-4">
+        <router-outlet></router-outlet>
+
         <!--Add tag to load the DocumentDetailComponent here
         assign the value of the selectedDocument variable into the document input variable defined in the DocumentDetailComponent.
         -->
-        <cms-document-detail
+        <!--cms-document-detail
             *ngIf="selectedDocument"
             [document]="selectedDocument"
         >
         This is invisible
-        </cms-document-detail>
+        </cms-document-detail-->
     </div>
 </div>

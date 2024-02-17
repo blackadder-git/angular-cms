@@ -10,13 +10,17 @@ import { ContactService } from '../contact.service';
 export class ContactListComponent implements OnInit {
   contacts: Contact[] = [];
 
-  constructor(private contactService: ContactService) {}
-
-  ngOnInit(): void {
-    this.contacts = this.contactService.getContacts();
+  constructor(private contactService: ContactService) {
+    this.contacts = this.contactService.getContacts();  // load MOCKCONTACTS
   }
 
-  onSelected(contact: Contact) {
-    this.contactService.contactSelectedEvent.emit(contact);
+  // get list of contacts from service
+  ngOnInit(): void {
+    this.contactService.contactChangedEvent
+      .subscribe(
+        (contacts: Contact[]) => {
+            this.contacts = contacts;
+          }
+        );    
   }
 }

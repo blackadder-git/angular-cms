@@ -27,6 +27,7 @@ export const MOCKMESSAGES: Message[] = [
     id: '5', 
     subject: 'Assignment 3 help', 
     msgText: 'I can meet with you today at 4:00 PM in my office.', 
-    sender: '7'}
+    sender: '7'
+  },
 ];
 

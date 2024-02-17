@@ -8,6 +8,7 @@ import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 export class DocumentService {
   private documents: Document[] = [];
   documentSelectedEvent = new EventEmitter<Document>();
+  documentChangedEvent = new EventEmitter<Document[]>();
 
   constructor() { 
     this.documents = MOCKDOCUMENTS;
@@ -24,5 +25,17 @@ export class DocumentService {
     // Using return inside a forEach loop exits the loop, not the function
     // Instead, use find to return the document or null if not found
     return this.documents.find(document => document.id === id);
+  }
+
+  deleteDocument(document: Document) {
+    if (!document) {
+      return;
+    }
+    const pos = this.documents.indexOf(document);
+    if (pos < 0) {
+      return;
+    }
+    this.documents.splice(pos, 1);
+    this.documentChangedEvent.emit(this.documents.slice());    
   }
 }
