@@ -66,7 +66,7 @@ export class DocumentService {
     newDocument.id = "" + this.maxDocumentId;
     this.documents.push(newDocument);
     let documentsListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentsListClone);
+    this.documentListChangedEvent.next(documentsListClone); // pass event to any subscribers
   }
 
   // ********************************
@@ -88,7 +88,7 @@ export class DocumentService {
     newDocument.id = originalDocument.id;
     this.documents[pos] = newDocument;
     let documentsListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentsListClone);
+    this.documentListChangedEvent.next(documentsListClone); // pass event to any subscribers
   }
 
   // ********************************
@@ -110,8 +110,8 @@ export class DocumentService {
     this.documents.splice(pos, 1);
     //this.documentChangedEvent.emit(this.documents.slice()); 
     let documentsListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentsListClone);
+    this.documentListChangedEvent.next(documentsListClone); // pass event to any subscribers
 
-    //this.documentListChangedEvent.next(this.documents.slice());
+    //this.documentListChangedEvent.next(this.documents.slice()); // pass event to any subscribers
   }
 }

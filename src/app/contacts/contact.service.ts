@@ -66,7 +66,7 @@ export class ContactService {
     newContact.id = "" + this.maxContactId;
     this.contacts.push(newContact);
     let contactsListClone = this.contacts.slice();
-    this.contactListChangedEvent.next(contactsListClone);
+    this.contactListChangedEvent.next(contactsListClone); // pass event to any subscribers
   }
 
   // ********************************
@@ -88,7 +88,7 @@ export class ContactService {
     newContact.id = originalContact.id;
     this.contacts[pos] = newContact;
     let contactsListClone = this.contacts.slice();
-    this.contactListChangedEvent.next(contactsListClone);
+    this.contactListChangedEvent.next(contactsListClone); // pass event to any subscribers
   }
 
   // ********************************
@@ -110,8 +110,8 @@ export class ContactService {
     this.contacts.splice(pos, 1);
     //this.contactChangedEvent.emit(this.contacts.slice());
     let contactsListClone = this.contacts.slice();
-    this.contactListChangedEvent.next(contactsListClone);
+    this.contactListChangedEvent.next(contactsListClone); // pass event to any subscribers
 
-    //this.contactListChangedEvent.next(this.contacts.slice());  
+    //this.contactListChangedEvent.next(this.contacts.slice()); // pass event to any subscribers
   }
 }
