@@ -3,7 +3,7 @@ import { NgForm, FormControl } from '@angular/forms';
 import { Contact } from '../contact.model';
 import { ContactService } from '../contact.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'cms-contact-edit',
@@ -13,7 +13,7 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 export class ContactEditComponent implements OnInit {
   originalContact: Contact;
   contact: Contact;
-  groupContacts: Contact[];
+  groupContacts: Contact[] = [];
   editMode: boolean = false;
 
   constructor(private contactService: ContactService, private router: Router, private route: ActivatedRoute) {
@@ -57,13 +57,16 @@ export class ContactEditComponent implements OnInit {
   onSubmit(form: NgForm) {
     console.log(form.value);
     let value = form.value;
-    let newContact = new Contact("", value.name, value.email, value.phone, value.imageUrl);
+    console.log("GROUP CONTACTS", value.groupContacts);
+    let newContact = new Contact("", value.name, value.email, value.phone, value.imageUrl, this.groupContacts);
 
     if (this.editMode == true) {
+      console.log("Update contact");
       // Update takes care of assigning the new id
       this.contactService.updateContact(this.originalContact, newContact);
     }
     else {
+      console.log("Add new contact");
       // Add a new contact
       this.contactService.addContact(newContact)
     }
@@ -71,22 +74,36 @@ export class ContactEditComponent implements OnInit {
     this.router.navigate(["/contacts"]);
   }
 
-  addToGroup(event: any): void {
-    console.log("addToGroup", event.item.data);
+  addToGroup(event: CdkDragDrop<Contact[]>): void {
+    // console.log("previousContainer.data", event.previousContainer.data);
+    // console.log("container.data", event.container.data);
+    // console.log("previousIndex", event.previousIndex);
+    // console.log("currentIndex", event.currentIndex);
 
-    const selectedContact: Contact = event.item.data;
+    // console.log(event.previousContainer.data[event.previousIndex])
+
+    /*
+    transferArrayItem (
+      event.previousContainer.data,
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    )*/
+  
+    const selectedContact: Contact = event.previousContainer.data[event.previousIndex];
     const invalidGroupContact = this.isInvalidContact(selectedContact);
     if (invalidGroupContact){
        return;
     }
     this.groupContacts.push(selectedContact);
 
+    console.log("CONTACTS", this.groupContacts);
   }
 
 
   // Make sure contact is not already in the list
   isInvalidContact(newContact: Contact) {
-    console.log("newContact", newContact);
+    console.log("validateContact", newContact);
     if (!newContact) {// newContact has no value
       return true;
     }
@@ -100,5 +117,13 @@ export class ContactEditComponent implements OnInit {
     }
     return false;
   }
+
+
+  onRemoveItem(index: number) {
+    if (index < 0 || index >= this.groupContacts.length) {
+      return;
+    }
+    this.groupContacts.splice(index, 1);
+ }
 
 }

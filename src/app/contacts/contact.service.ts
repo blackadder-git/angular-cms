@@ -86,6 +86,9 @@ export class ContactService {
 
     // Set id of new contact and replace in list
     newContact.id = originalContact.id;
+
+    console.log("UPDATED CONTACT", newContact);
+
     this.contacts[pos] = newContact;
     let contactsListClone = this.contacts.slice();
     this.contactListChangedEvent.next(contactsListClone); // pass event to any subscribers
