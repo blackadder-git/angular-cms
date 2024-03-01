@@ -13,7 +13,23 @@
         </div>
     </div>
     <div class="panel-body">
+
         <h4>Email: {{ contact.email }}</h4>
         <h4>Phone: {{ contact.phone }}</h4>
+
+        <div class="form-group">
+            <label for="groupList">Group Contacts:</label>
+
+            <div class="row" id="groupList"
+                style="min-height: 3rem;">
+                <div *ngFor="let contact of groupContacts; let i = index">
+                    <div>
+                        <cms-contact-item class="col-sm-11" [contact]="contact"></cms-contact-item>
+                        <!--button class="btn btn-danger col-sm-2 deleteButton" (click)="onRemoveItem(i)">X</button-->
+                    </div>
+                </div>
+                <!--span class="dragMsg" *ngIf="groupContacts?.length < 1">Drag contacts in group here</span-->
+            </div>
+        </div>
     </div>
 </div>

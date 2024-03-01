@@ -10,3 +10,14 @@
     border-radius: 20%;
     width: 8rem;
 }
+  
+.groupDiv {
+    min-height: 6rem;
+    border: solid thin lightgrey;
+}
+  
+.dragMsg {
+    font-size: 2rem;
+    color: darkgrey;
+    margin-left: 3rem;
+}

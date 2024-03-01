@@ -9,13 +9,17 @@
             </div>
         </div>
     </div>
-    <div class="panel-body">
+    <div class="panel-body"
+        cdkDropList
+        [cdkDropListConnectedTo]="['groupList']"
+        [cdkDropListData]="contacts">
         <!-- contacts lives in the component.ts -->
         <!-- for each contact in contacts, pass to [contact] in contact-item -->
         <!-- pass the same contact object to the onSelect() method -->
         <cms-contact-item
             *ngFor="let contact of contacts"
             [contact]="contact"
+            cdkDrag
         >
         </cms-contact-item>
     </div>
