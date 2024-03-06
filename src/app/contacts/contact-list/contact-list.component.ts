@@ -12,6 +12,7 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 export class ContactListComponent implements OnInit, OnDestroy {
   contacts: Contact[] = [];
   subscription: Subscription;
+  term: string = "";
 
   constructor(private contactService: ContactService) {
     this.contacts = this.contactService.getContacts();  // load MOCKCONTACTS
@@ -26,6 +27,10 @@ export class ContactListComponent implements OnInit, OnDestroy {
             this.contacts = contacts;
           }
         );    
+  }
+
+  search(value: string) {
+    this.term = value;
   }
 
   ngOnDestroy(): void {

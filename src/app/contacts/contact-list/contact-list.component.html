@@ -4,9 +4,16 @@
             <div class="col-xs-6">
                 <h1 class="panel-title text-left">Contacts</h1>
             </div>
-            <div class="col-xs-6 text-right">
-                <button class="btn btn-success" routerLink="new">New contact</button>
-            </div>
+            <div class="row">
+                <div class="input-group pull-left pad-left-right col-xs-7">
+                    <!-- Add the search box input field here -->
+                    <input type="text" (ngModel)="term" #searchBox class="form-control" (keyup)="search($event)">
+                    <div class="glyphicon glyphicon-search input-group-addon" (click)="search(searchBox.value)"></div>
+                </div>
+                <div class="pull-right padding-right-md">
+                    <button class="btn btn-success" routerLink="new">New contact</button>
+                </div>
+            </div>                
         </div>
     </div>
     <div class="panel-body"
@@ -17,7 +24,7 @@
         <!-- for each contact in contacts, pass to [contact] in contact-item -->
         <!-- pass the same contact object to the onSelect() method -->
         <cms-contact-item
-            *ngFor="let contact of contacts"
+            *ngFor="let contact of contacts | contactsFilter:searchBox.value"
             [contact]="contact"
             cdkDrag
         >
