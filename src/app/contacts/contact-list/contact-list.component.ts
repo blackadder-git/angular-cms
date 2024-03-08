@@ -14,12 +14,13 @@ export class ContactListComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   term: string = "";
 
-  constructor(private contactService: ContactService) {
-    this.contacts = this.contactService.getContacts();  // load MOCKCONTACTS
-  }
+  constructor(private contactService: ContactService) {}
 
   // get list of contacts from service
   ngOnInit(): void {
+    // load contacts
+    this.contacts = this.contactService.getContacts();
+
     // listen for the contactListChangedEvent, when it happens, get a list of contacts
     this.subscription = this.contactService.contactListChangedEvent
       .subscribe(
