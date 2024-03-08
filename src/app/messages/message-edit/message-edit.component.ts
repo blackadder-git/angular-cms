@@ -8,7 +8,7 @@ import { MessageService } from '../message.service';
   styleUrl: './message-edit.component.css'
 })
 export class MessageEditComponent {
-  currentSender = '0'; // uses contact id now to get contact object later
+  currentSender = '19'; // uses contact id now to get contact object later
   @ViewChild("subject") subject: ElementRef;
   @ViewChild("msgText") msgText: ElementRef;
   @Output() addMessageEvent = new EventEmitter<Message>();

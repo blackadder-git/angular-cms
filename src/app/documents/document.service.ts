@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { Document } from './document.model';
-import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
+// import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
@@ -9,7 +9,6 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 
-// this.http.get<{ [id: string]: Document }>("https://angular-contacts-cms-default-rtdb.europe-west1.firebasedatabase.app/documents.json")
 // https://console.firebase.google.com/project/angular-contacts-cms/database/angular-contacts-cms-default-rtdb/data
 // https://www.youtube.com/watch?v=iF2sv5E3SvE
 
@@ -23,16 +22,34 @@ export class DocumentService {
   constructor(private http: HttpClient) { 
     // this.documents = MOCKDOCUMENTS;
     this.initializeData();
-  
-  
-    // Generate largest id    
-    this.maxDocumentId = this.getMaxId();
   }
 
+  // ********************************
+  // load documents
+  // ********************************
   initializeData() {
     this.queryData().subscribe(docs => {
       this.documents = docs;
+
+      // Generate largest id    
+      this.maxDocumentId = this.getMaxId();
     });    
+  }
+
+  // ********************************
+  // Get max document id
+  // ********************************
+  getMaxId(): number {
+    let maxId = 0;
+
+    this.documents.forEach((document) => {
+      let currentId = parseInt(document.id);
+      if (currentId > maxId) {
+        maxId = currentId;
+      }
+    });
+
+    return maxId
   }
 
   // ********************************
@@ -61,19 +78,15 @@ export class DocumentService {
           }
         });
 
-
-        console.log("all docs", firebaseDocs);
+        // console.log("all docs", firebaseDocs);
         this.documentListChangedEvent.next(firebaseDocs); // pass event to any subscribers
-        return firebaseDocs
+        return firebaseDocs;
       }));
-    /*
-    .subscribe(docs => {
-      this.documents = docs;
-      console.log("all docs", docs);
-    });
-    */
   }
 
+  // ********************************
+  // Update documents in Firebase
+  // ********************************
   storeDocuments() {
     const documentStringData = JSON.stringify(this.documents);
     this.http.put(
@@ -89,22 +102,6 @@ export class DocumentService {
       let documentsListClone = this.documents.slice();
       this.documentListChangedEvent.next(documentsListClone); // pass event to any subscribers      
     });
-  }
-
-  // ********************************
-  // Get max document id
-  // ********************************
-  getMaxId(): number {
-    let maxId = 0;
-
-    this.documents.forEach((document) => {
-      let currentId = parseInt(document.id);
-      if (currentId > maxId) {
-        maxId = currentId;
-      }
-    });
-
-    return maxId
   }
 
   // ********************************
@@ -139,10 +136,11 @@ export class DocumentService {
     this.maxDocumentId++;
     newDocument.id = "" + this.maxDocumentId;
     this.documents.push(newDocument);
+
     // Save changes to Firebase
     this.storeDocuments();
-    //let documentsListClone = this.documents.slice();
-    //this.documentListChangedEvent.next(documentsListClone); // pass event to any subscribers
+    // let documentsListClone = this.documents.slice();
+    // this.documentListChangedEvent.next(documentsListClone); // pass event to any subscribers
   }
 
   // ********************************
@@ -163,9 +161,9 @@ export class DocumentService {
     // Set id of new document and replace in list
     newDocument.id = originalDocument.id;
     this.documents[pos] = newDocument;
+
     // Save changes to Firebase
     this.storeDocuments();
-
     // let documentsListClone = this.documents.slice();
     // this.documentListChangedEvent.next(documentsListClone); // pass event to any subscribers
   }
@@ -191,8 +189,8 @@ export class DocumentService {
 
     // Save changes to Firebase
     this.storeDocuments();
-    //let documentsListClone = this.documents.slice();
-    //this.documentListChangedEvent.next(documentsListClone); // pass event to any subscribers
-    //this.documentListChangedEvent.next(this.documents.slice()); // pass event to any subscribers
+    // let documentsListClone = this.documents.slice();
+    // this.documentListChangedEvent.next(documentsListClone); // pass event to any subscribers
+    // vs this.documentListChangedEvent.next(this.documents.slice()); // pass event to any subscribers
   }
 }

@@ -1,7 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { Contact } from './contact.model';
-import { MOCKCONTACTS } from './MOCKCONTACTS';
+//import { MOCKCONTACTS } from './MOCKCONTACTS';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +15,21 @@ export class ContactService {
   contactListChangedEvent = new Subject<Contact[]>();
   maxContactId: number = 0;
 
-  constructor() {
-    this.contacts = MOCKCONTACTS;
-    this.maxContactId = this.getMaxId();
+  constructor(private http: HttpClient) {
+    // this.contacts = MOCKCONTACTS;
+    this.initializeData();
+  }
+
+  // ********************************
+  // load contacts
+  // ********************************
+  initializeData() {
+    this.queryData().subscribe(contacts => {
+      this.contacts = contacts;
+
+      // generate largest id
+      this.maxContactId = this.getMaxId();
+    });    
   }
 
   // ********************************
@@ -35,7 +49,46 @@ export class ContactService {
   }
 
   // ********************************
-  // Return all conctacts
+  // Get contacts from Firebase
+  // ********************************
+  queryData(): Observable<Contact[]> {
+    return this.http.get<{ [id: string]: Contact }>(
+      "https://angular-contacts-cms-default-rtdb.europe-west1.firebasedatabase.app/contacts.json")
+      .pipe(map(responseData => {
+        // Convert JSON object to JavaScript object
+        const firebaseContacts: Contact[] = [];
+        for (const key in responseData) {
+          firebaseContacts.push({ ...responseData[key], id: key })
+        }
+
+        // console.log("all docs", firebaseContacts);
+        this.contactListChangedEvent.next(firebaseContacts); // pass event to any subscribers
+        return firebaseContacts;
+      }));
+  }
+
+  // ********************************
+  // Update contacts in Firebase
+  // ********************************
+  storeContacts() {
+    const contactStringData = JSON.stringify(this.contacts);
+    this.http.put(
+      "https://angular-contacts-cms-default-rtdb.europe-west1.firebasedatabase.app/contacts.json", 
+      contactStringData,
+      {
+        headers: new HttpHeaders({
+          "Content-Type": "application/json"
+        })
+      }
+    ).subscribe(responseData => {
+      console.log(responseData);
+      let contactsListClone = this.contacts.slice();
+      this.contactListChangedEvent.next(contactsListClone); // pass event to any subscribers      
+    });
+  }
+
+  // ********************************
+  // Return all contacts
   // ********************************
   getContacts() {
     return this.contacts.slice();
@@ -65,8 +118,11 @@ export class ContactService {
     this.maxContactId++;
     newContact.id = "" + this.maxContactId;
     this.contacts.push(newContact);
-    let contactsListClone = this.contacts.slice();
-    this.contactListChangedEvent.next(contactsListClone); // pass event to any subscribers
+    
+    // Save changes to Firebase
+    this.storeContacts();
+    // let contactsListClone = this.contacts.slice();
+    // this.contactListChangedEvent.next(contactsListClone); // pass event to any subscribers
   }
 
   // ********************************
@@ -90,8 +146,11 @@ export class ContactService {
     console.log("UPDATED CONTACT", newContact);
 
     this.contacts[pos] = newContact;
-    let contactsListClone = this.contacts.slice();
-    this.contactListChangedEvent.next(contactsListClone); // pass event to any subscribers
+
+    // Save changes to Firebase
+    this.storeContacts();
+    // let contactsListClone = this.contacts.slice();
+    // this.contactListChangedEvent.next(contactsListClone); // pass event to any subscribers
   }
 
   // ********************************
@@ -112,9 +171,11 @@ export class ContactService {
     // Remove contact from list
     this.contacts.splice(pos, 1);
     //this.contactChangedEvent.emit(this.contacts.slice());
-    let contactsListClone = this.contacts.slice();
-    this.contactListChangedEvent.next(contactsListClone); // pass event to any subscribers
-
-    //this.contactListChangedEvent.next(this.contacts.slice()); // pass event to any subscribers
+    
+    // Save changes to Firebase
+    this.storeContacts();
+    // let contactsListClone = this.contacts.slice();
+    // this.contactListChangedEvent.next(contactsListClone); // pass event to any subscribers
+    // vs this.contactListChangedEvent.next(this.contacts.slice()); // pass event to any subscribers
   }
 }
