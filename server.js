@@ -57,7 +57,8 @@ console.log(path.join(__dirname, '../../dist/cms/browser/'));
 // Tell express to use the specified director as the
 // root directory for your web site
 //app.use(express.static(path.join(__dirname, 'dist/cms/browser/index.html')));
-app.use(express.static(path.join(__dirname, '../../dist/cms/browser/index.html')));
+app.use(express.static(path.join(__dirname, './dist/cms/browser/')));
+
 // Tell express to map the default route ('/') to the index route
 app.use('/', index);
 
@@ -66,7 +67,7 @@ app.use('/', index);
 // Tell express to map all other non-defined routes back to the index page
 app.get('*', (req, res) => {
   //res.sendFile(path.join(__dirname, 'dist/cms/browser/index.html'));
-  res.sendFile(path.join(__dirname, '../../dist/cms/browser/index.html'));
+  res.sendFile(path.join(__dirname, './dist/cms/browser/'));
 });
 
 // Define the port address and tell express to use this port
