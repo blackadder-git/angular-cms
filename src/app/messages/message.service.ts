@@ -26,6 +26,9 @@ export class MessageService {
     this.queryData().subscribe(messages => {
       this.messages = messages;
 
+      // alert subscribes to change
+      this.messageListChangedEvent.next(this.messages.slice());
+
       // generate largest id
       this.maxMessageId = this.getMaxId();
     });    
@@ -36,18 +39,9 @@ export class MessageService {
   // ********************************
   queryData(): Observable<Message[]> {
     return this.http.get<{ [id: string]: Message }>(
-      "https://angular-contacts-cms-default-rtdb.europe-west1.firebasedatabase.app/messages.json")
-      .pipe(map(responseData => {
-        // Convert JSON object to JavaScript object
-        const firebaseMessages: Message[] = [];
-        for (const key in responseData) {
-          firebaseMessages.push({ ...responseData[key], id: key })
-        }
-
-        // console.log("all docs", firebaseMessages);
-        this.messageListChangedEvent.next(firebaseMessages); // pass event to any subscribers
-        return firebaseMessages;
-      }));
+      "https://angular-contacts-cms-default-rtdb.europe-west1.firebasedatabase.app/messages.json").pipe(
+        map((response) => Object.values(response))
+      );
   }
 
   // ********************************
@@ -86,7 +80,9 @@ export class MessageService {
     return maxId
   }
 
-
+  // ********************************
+  // Return all messages
+  // ********************************
   getMessages() {
     return this.messages.slice();
   }

@@ -28,12 +28,54 @@ export class DocumentService {
   // load documents
   // ********************************
   initializeData() {
-    this.queryData().subscribe(docs => {
-      this.documents = docs;
+    this.queryData().subscribe(
+      (response) => {
+        this.documents = Object.values(response);
 
-      // Generate largest id    
-      this.maxDocumentId = this.getMaxId();
-    });    
+        // sort the list of documents
+        this.sortDocuments();
+        // generate largest id
+        this.maxDocumentId = this.getMaxId();
+        console.log(this.maxDocumentId)
+        // alert subscribes to change
+        this.documentListChangedEvent.next(this.documents.slice());
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  // ********************************
+  // Sort documents in ascending order by name (title)
+  // ********************************
+  sortDocuments() {
+    // sort the data before saving
+    this.documents.sort((doc1, doc2)  => {
+      const lowerCase1 = doc1.name.toLowerCase();
+      const lowerCase2 = doc2.name.toLowerCase();
+      if (lowerCase1 < lowerCase2) {
+        // console.log("sort -1");
+        return -1;
+      }
+      else if (lowerCase1 > lowerCase2) {
+        // console.log("sort 1");
+        return 1
+      }
+      return 0;
+    });
+
+    // console.log("Sorted the docs: ", this.documents);
+  }
+
+  // ********************************
+  // Get documents from Firebase
+  // ********************************
+  queryData(): Observable<Document[]> {
+    return this.http.get<{ [id: string]: Document }>(
+      "https://angular-contacts-cms-default-rtdb.europe-west1.firebasedatabase.app/documents.json").pipe(
+        map((response) => Object.values(response))
+      );
   }
 
   // ********************************
@@ -53,41 +95,10 @@ export class DocumentService {
   }
 
   // ********************************
-  // Get documents from Firebase
-  // ********************************
-  queryData(): Observable<Document[]> {
-    return this.http.get<{ [id: string]: Document }>(
-      "https://angular-contacts-cms-default-rtdb.europe-west1.firebasedatabase.app/documents.json")
-      .pipe(map(responseData => {
-        // Convert JSON object to JavaScript object
-        const firebaseDocs: Document[] = [];
-        for (const key in responseData) {
-          firebaseDocs.push({ ...responseData[key], id: key })
-        }
-
-        // Sort documents
-        firebaseDocs.sort((doc1, doc2)  => {
-          if (doc1.name < doc2.name) {
-            return -1;
-          }
-          else if (doc1.name > doc2.name) {
-            return 1
-          }
-          else {
-            return 0;
-          }
-        });
-
-        // console.log("all docs", firebaseDocs);
-        this.documentListChangedEvent.next(firebaseDocs); // pass event to any subscribers
-        return firebaseDocs;
-      }));
-  }
-
-  // ********************************
   // Update documents in Firebase
   // ********************************
   storeDocuments() {
+    this.sortDocuments();    
     const documentStringData = JSON.stringify(this.documents);
     this.http.put(
       "https://angular-contacts-cms-default-rtdb.europe-west1.firebasedatabase.app/documents.json", 
@@ -99,8 +110,8 @@ export class DocumentService {
       }
     ).subscribe(responseData => {
       console.log(responseData);
-      let documentsListClone = this.documents.slice();
-      this.documentListChangedEvent.next(documentsListClone); // pass event to any subscribers      
+
+      this.documentListChangedEvent.next(this.documents); // pass event to any subscribers
     });
   }
 
@@ -108,7 +119,6 @@ export class DocumentService {
   // Return all documents
   // ********************************
   getDocuments() {
-    console.log("getDocuments", this.documents);
     return this.documents.slice();
   }
 

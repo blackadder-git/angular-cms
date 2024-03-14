@@ -27,6 +27,9 @@ export class ContactService {
     this.queryData().subscribe(contacts => {
       this.contacts = contacts;
 
+      // alert subscribes to change
+      this.contactListChangedEvent.next(this.contacts.slice());
+
       // generate largest id
       this.maxContactId = this.getMaxId();
     });    
@@ -53,18 +56,9 @@ export class ContactService {
   // ********************************
   queryData(): Observable<Contact[]> {
     return this.http.get<{ [id: string]: Contact }>(
-      "https://angular-contacts-cms-default-rtdb.europe-west1.firebasedatabase.app/contacts.json")
-      .pipe(map(responseData => {
-        // Convert JSON object to JavaScript object
-        const firebaseContacts: Contact[] = [];
-        for (const key in responseData) {
-          firebaseContacts.push({ ...responseData[key], id: key })
-        }
-
-        // console.log("all docs", firebaseContacts);
-        this.contactListChangedEvent.next(firebaseContacts); // pass event to any subscribers
-        return firebaseContacts;
-      }));
+      "https://angular-contacts-cms-default-rtdb.europe-west1.firebasedatabase.app/contacts.json").pipe(
+        map((response) => Object.values(response))
+      );
   }
 
   // ********************************
@@ -98,11 +92,13 @@ export class ContactService {
   // Return contact object matching id or, if not found, return null
   // ********************************
   getContact(id: String) {
-    console.log("Contact Lookup: ", id)
+    console.log("getContact: ", id)
     
     // Using return inside a forEach loop exits the loop, not the function
     // Instead, use find to return the contact or null if not found
-    return this.contacts.find(contact => contact.id === id);
+    let con = this.contacts.find(contact => contact.id === id);
+    console.log(con);
+    return con;
   }
 
   // ********************************

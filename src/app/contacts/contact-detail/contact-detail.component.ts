@@ -10,7 +10,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 export class ContactDetailComponent implements OnInit {
   contact: Contact;
-  groupContacts: Contact[];
+  groupContacts: Contact[] = [];
 
   constructor(private contactService: ContactService, 
               private router: Router, 
@@ -26,6 +26,10 @@ export class ContactDetailComponent implements OnInit {
         // group contacts
         if (this.contact.group != null) {
           this.groupContacts = JSON.parse(JSON.stringify(this.contact.group));
+        }
+        else {
+          // clear out old group contacts
+          this.groupContacts = [];
         }
       });
   }
