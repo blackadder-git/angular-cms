@@ -8,19 +8,25 @@ var logger = require('morgan');
 
 // import the routing file to handle the default (index) route
 var index = require('./server/routes/app');
+const documentRoutes = require('./server/routes/documents');
+const messageRoutes = require('./server/routes/messages');
+const contactRoutes = require('./server/routes/contacts');
+
 
 // ... ADD CODE TO IMPORT YOUR ROUTING FILES HERE ... 
 var app = express(); // create an instance of express
 
 // map default route to "/" index
 app.use('/', index);
+app.use('/documents', documentRoutes);
+app.use('/messages', messageRoutes);
+app.use('/contacts', contactRoutes);
 
 // map all other (non-defined) routes back to the index page
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     res.render("index");
 });
-
 
 var app = express(); // create an instance of express
 
@@ -52,11 +58,9 @@ app.use((req, res, next) => {
   next();
 });
 
-console.log(path.join(__dirname, '../../dist/cms/browser/'));
-
 // Tell express to use the specified director as the
 // root directory for your web site
-//app.use(express.static(path.join(__dirname, 'dist/cms/browser/index.html')));
+console.log(path.join(__dirname, './dist/cms/browser/'));
 app.use(express.static(path.join(__dirname, './dist/cms/browser/')));
 
 // Tell express to map the default route ('/') to the index route
@@ -66,7 +70,6 @@ app.use('/', index);
 
 // Tell express to map all other non-defined routes back to the index page
 app.get('*', (req, res) => {
-  //res.sendFile(path.join(__dirname, 'dist/cms/browser/index.html'));
   res.sendFile(path.join(__dirname, './dist/cms/browser/'));
 });
 
