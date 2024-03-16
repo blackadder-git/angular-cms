@@ -16,12 +16,6 @@ const contactRoutes = require('./server/routes/contacts');
 // ... ADD CODE TO IMPORT YOUR ROUTING FILES HERE ... 
 var app = express(); // create an instance of express
 
-// map default route to "/" index
-app.use('/', index);
-app.use('/documents', documentRoutes);
-app.use('/messages', messageRoutes);
-app.use('/contacts', contactRoutes);
-
 // map all other (non-defined) routes back to the index page
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -67,10 +61,13 @@ app.use(express.static(path.join(__dirname, './dist/cms/browser/')));
 app.use('/', index);
 
 // ... ADD YOUR CODE TO MAP YOUR URL'S TO ROUTING FILES HERE ...
+app.use('/documents', documentRoutes);
+app.use('/messages', messageRoutes);
+app.use('/contacts', contactRoutes);
 
 // Tell express to map all other non-defined routes back to the index page
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './dist/cms/browser/'));
+  res.sendFile(path.join(__dirname, './dist/cms/browser/index.html'));
 });
 
 // Define the port address and tell express to use this port
