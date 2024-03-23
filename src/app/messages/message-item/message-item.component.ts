@@ -10,14 +10,25 @@ import { ContactService } from '../../contacts/contact.service';
 })
 export class MessageItemComponent implements OnInit {
   @Input() message: Message;
-  messageSender: string;
+  messageSender: string = "";
 
   constructor(private contactService: ContactService) {}
 
   ngOnInit(): void {
-    console.log("Message Sender:", this.message.sender);
-    const contact: Contact = this.contactService.getContact(this.message.sender);
-    console.log(contact)
-    this.messageSender = contact.name;
+    const sender = this.message.sender;
+    console.log("Message Sender:", sender['id']);
+    if (sender) {
+      const contact: Contact = this.contactService.getContact(sender['id']);
+      console.log("Contact object", contact);
+      if (contact) {
+        this.messageSender = contact.name;
+      }
+      else {
+        console.log("Undefined contact");
+      }
+    }
+    else {
+      console.log("Undefined sender");
+    }
   }
 }

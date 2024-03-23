@@ -58,7 +58,7 @@ export class ContactEditComponent implements OnInit {
     console.log(form.value);
     let value = form.value;
     console.log("GROUP CONTACTS", value.groupContacts);
-    let newContact = new Contact("", value.name, value.email, value.phone, value.imageUrl, this.groupContacts);
+    let newContact = new Contact("", "", value.name, value.email, value.phone, value.imageUrl, this.groupContacts);
 
     if (this.editMode == true) {
       console.log("Update contact");

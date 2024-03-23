@@ -16,7 +16,7 @@ export class MessageListComponent implements OnInit {
 
   ngOnInit(): void {
     // load messages
-    this.messages = this.messageService.getMessages();
+    this.messageService.getMessages();
 
     // console.log(this.messages)
     // listen for the contactSelectedEvent to happen
@@ -25,6 +25,7 @@ export class MessageListComponent implements OnInit {
       .subscribe(
         (messages: Message[]) => {
             this.messages = messages;
+            console.log("All Messages in list", this.messages);
           }
         );    
 

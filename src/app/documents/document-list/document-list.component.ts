@@ -10,20 +10,21 @@ import { Subscription } from 'rxjs';
 })
 export class DocumentListComponent implements OnInit, OnDestroy {
   documents: Document[] = [];
-  documentId: string = "";
+  //documentId: string = "";
   subscription: Subscription;
 
   constructor(private documentService: DocumentService) {}
 
   ngOnInit(): void {
     // load documents
-    this.documents = this.documentService.getDocuments();
+    this.documentService.getDocuments();
 
     // listen for the documentListChangedEvent, when it happens, get a list of documents
     this.subscription = this.documentService.documentListChangedEvent
       .subscribe(
         (documents: Document[]) => {
             this.documents = documents;
+            console.log("All Documents in list", this.documents);
           }
         );
   }

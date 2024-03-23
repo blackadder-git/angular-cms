@@ -19,13 +19,14 @@ export class ContactListComponent implements OnInit, OnDestroy {
   // get list of contacts from service
   ngOnInit(): void {
     // load contacts
-    this.contacts = this.contactService.getContacts();
+    this.contactService.getContacts();
 
     // listen for the contactListChangedEvent, when it happens, get a list of contacts
     this.subscription = this.contactService.contactListChangedEvent
       .subscribe(
         (contacts: Contact[]) => {
             this.contacts = contacts;
+            console.log("All Contacts in list", this.contacts);
           }
         );    
   }

@@ -5,6 +5,11 @@ var http = require('http');
 //var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
+require('dotenv').config();
+
+// get connection uri
+const uri = process.env.MONGODB_URI;
 
 // import the routing file to handle the default (index) route
 var index = require('./server/routes/app');
@@ -40,11 +45,14 @@ app.use(logger('dev')); // Tell express to use the Morgan logger
 
 // Add support for CORS
 app.use((req, res, next) => {
+  // allow requests from any domain
   res.setHeader('Access-Control-Allow-Origin', '*');
+  // allow additional headers
   res.setHeader(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
   );
+  // allow what HTTP actions are accepted
   res.setHeader(
     'Access-Control-Allow-Methods',
     'GET, POST, PATCH, PUT, DELETE, OPTIONS'
@@ -69,6 +77,16 @@ app.use('/contacts', contactRoutes);
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './dist/cms/browser/index.html'));
 });
+
+// establish a connection to the mongo database mongodb://localhost:27017/cms
+// Connect to MongoDB Atlas
+mongoose.connect(uri)
+  .then(() => 
+    console.log('Connected to MongoDB')
+  )
+  .catch(err => 
+    console.error('Error connecting to MongoDB:', err)
+  );
 
 // Define the port address and tell express to use this port
 const port = process.env.PORT || '3000';
